@@ -35,7 +35,7 @@ param capacita{1 .. P}, >= 0;
 # Capacità massima in totale
 param capacitaTotale, >= 0;
 
-# Quantità minima di ogni prodotto che deve rimanere in magazzino ogni settimana
+# Quantità minima di ogni prodotto che deve rimanere in magazzino alla fine dell'ultima settimana
 param safety{1 .. P}, >= 0;
 
 # Dimensione minima di un ordine
@@ -51,8 +51,10 @@ var quantita{1 .. P, 1 .. T}, >= 0;
 var quantitaTotale{1 .. T}, >= 0;
 
 
-# La quantità di ogni prodotto deve sempre stare tra la capacità e la safety.
-c1{p in 1 .. P, t in 1 .. T}: safety[p] <= quantita[p, t];
+# All'ultima settimana, la quantità deve essere almeno safety
+c1{p in 1 .. P}: safety[p] <= quantita[p, T];
+
+# La quantità di ogni prodotto deve sempre essere minore della capacità e la safety.
 c2{p in 1 .. P, t in 1 .. T}: quantita[p, t] <= capacita[p];
 
 # Ci possono essere massimo X prodotti in magazzino.
